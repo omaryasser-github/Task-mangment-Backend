@@ -1,46 +1,101 @@
-import express from "express";
+import Task from "../models/TaskModel.js";
 
+export const getTask = async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.id);
+        res.status(200).json({
+            status: "success",
+            message: "getTask by id ",
+            data: {
+                task
+            }
+        });
+    } catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: err
+        });
+    }
+}
+// READ operation
+export const getAllTasks = async (req, res) => {
+    try {
+        const tasks = await Task.find();
 
-export const getAllTasks = async (req , res) => {
-    res.status(200).json({
-        status : "success" , 
-        message : "getAllTasks",
-        data:{}
-    });
+        res.status(200).json({
+            status: "success",
+            message: "getAllTasks",
+            result: tasks.length,
+            data: {
+                tasks
+            }
+        });
+    } catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: err
+        });
+    }
 }
 
-export const getTask = async (req , res) => {
-    res.status(200).json({
-        status : "success" , 
-        message : "getTask",
-        data:{}
-    });
+// CREATE operation
+export const createTasks = async (req, res) => {
+    try {
+        const newTask = await Task.create(req.body);
+
+        res.status(200).json({
+            status: "success",
+            message: "createTasks",
+            data: {
+                Task: newTask
+            }
+        });
+    } catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: err
+        });
+    }
 }
 
-export const createTasks = async (req , res) => {
-    res.status(200).json({
-        status : "success" , 
-        message : "createTasks",
-        data:{}
-    });
+// UPDATE operation
+export const updateTask = async (req, res) => {
+    try {
+        const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
+
+        res.status(200).json({
+            status: "success",
+            message: "updateTask",
+            data: {
+                task
+            }
+        });
+
+    } catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: err
+        });
+    }
 }
 
+// DELETE operation
+export const deleteTask = async (req, res) => {
+    try {
+        const task = await Task.findByIdAndDelete(req.params.id);
 
-export const updateTask = async (req , res) => {
-    res.status(200).json({
-        status : "success" , 
-        message : "updateTask",
-        data:{}
-    });
+        res.status(200).json({
+            status: "success",
+            message: "deleteTask",
+            data: { task }
+        });
+    } catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: err
+        });
+    }
 }
-
-
-export const deleteTask = async (req , res) => {
-    res.status(200).json({
-        status : "success" , 
-        message : "deleteTask",
-        data:{}
-    });
-}
-
-
